@@ -1,13 +1,16 @@
 # ProveNance™ Enterprise Supply Chain Intelligence Platform
-## Secure, Governed Conversational Analytics Architecture
+## Governed Conversational Analytics & 3D Digital Twin Architecture
+
+[![Live Deployment](https://img.shields.io/badge/Vercel-Live%20Demo-success?logo=vercel&style=for-the-badge)](https://frontend-chi-seven-75.vercel.app)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github&style=for-the-badge)](https://github.com/lokeshyadavalli001-star/ProveNance)
+
+🌐 **Live Production Application:** [https://frontend-chi-seven-75.vercel.app](https://frontend-chi-seven-75.vercel.app)
 
 ---
 
 ## EXECUTIVE DIRECTIVE & ARCHITECTURE MANDATE
 
-**ProveNance™** is a mission-critical, secure, governed supply-chain decision-intelligence platform that transforms heterogeneous operational data (ERP, WMS, TMS, PLM, IoT) into auditable, explainable business intelligence through a natural-language conversational interface.
-
-The platform operates with "**Defense-in-Depth**" security across every layer, ensuring that no single point of compromise exposes sensitive supply-chain, supplier, customer, or operational data.
+**ProveNance™** is a mission-critical, secure, governed supply-chain decision-intelligence platform that transforms heterogeneous operational data (ERP, WMS, TMS, PLM, IoT) into auditable, explainable business intelligence through an interactive conversational interface, 3D Digital Twin, and OpenFreeMap real-world geographic routing.
 
 ```
 OPERATIONAL DATA SOURCES (ERP, WMS, TMS, CRM, Supplier Feeds, IoT)
