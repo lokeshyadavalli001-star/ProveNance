@@ -36,7 +36,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({ data }) => {
 
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <LineChart data={data || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
             <XAxis dataKey="period" stroke="#64748b" tick={{ fontSize: 11 }} />
             <YAxis yAxisId="left" stroke="#64748b" tick={{ fontSize: 11 }} domain={[80, 100]} />

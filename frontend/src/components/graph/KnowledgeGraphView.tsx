@@ -15,9 +15,9 @@ export const KnowledgeGraphView: React.FC = () => {
     async function fetchGraph() {
       try {
         const data = await apiService.getGraph();
-        setNodes(data.nodes);
-        setEdges(data.edges);
-        if (data.nodes.length > 0) {
+        setNodes(data?.nodes || []);
+        setEdges(data?.edges || []);
+        if (data?.nodes?.length > 0) {
           setSelectedNode(data.nodes[0]);
         }
       } catch (e) {
@@ -43,7 +43,7 @@ export const KnowledgeGraphView: React.FC = () => {
     }
   };
 
-  const filteredNodes = nodes.filter(n => filterType === 'ALL' || n.type === filterType);
+  const filteredNodes = (nodes || []).filter(n => filterType === 'ALL' || n.type === filterType);
 
   const getNodeColor = (type: string) => {
     switch (type) {

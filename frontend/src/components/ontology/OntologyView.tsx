@@ -16,7 +16,7 @@ export const OntologyView: React.FC = () => {
           apiService.getMetrics()
         ]);
         setOntology(ontData);
-        setMetrics(metricsData.registry);
+        setMetrics(metricsData?.registry || []);
       } catch (e) {
         console.error('Failed to load ontology', e);
       } finally {
@@ -68,7 +68,7 @@ export const OntologyView: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-850">
-              {metrics.map((m) => (
+              {(metrics || []).map((m) => (
                 <tr key={m.id} className="hover:bg-slate-900/40">
                   <td className="px-4 py-3 font-bold text-white whitespace-nowrap">{m.name}</td>
                   <td className="px-4 py-3 font-mono text-provenance-400">{m.code}</td>

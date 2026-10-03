@@ -35,13 +35,15 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
     }
   };
 
+  const safeAlerts = alerts || [];
+
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <h3 className="text-sm font-bold text-white">Real-Time Disruption Signals</h3>
           <span className="rounded-full bg-red-950 px-2 py-0.5 text-[10px] font-semibold text-red-400 border border-red-800/50">
-            {alerts.length} Active
+            {safeAlerts.length} Active
           </span>
         </div>
         <button
@@ -54,13 +56,13 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({
       </div>
 
       <div className="space-y-3">
-        {alerts.length === 0 ? (
+        {safeAlerts.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8 text-center text-slate-500">
             <CheckCircle className="h-8 w-8 text-emerald-500 mb-2" />
             <p className="text-xs">Zero active disruption alerts across all operational lanes.</p>
           </div>
         ) : (
-          alerts.map((alert) => (
+          safeAlerts.map((alert) => (
             <div
               key={alert.id}
               className="rounded-lg border border-slate-800/80 bg-slate-950/80 p-4 transition hover:border-slate-700"
