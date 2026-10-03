@@ -1,0 +1,22 @@
+{
+  "name": "provenance",
+  "version": "1.0.0",
+  "description": "ProveNance™ Enterprise Supply Chain Intelligence Platform",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "test:security": "npm --prefix backend run test:security",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "supply-chain",
+    "decision-intelligence",
+    "security",
+    "governed-ai",
+    "provenance"
+  ],
+  "author": "ProveNance Architecture Team",
+  "license": "UNLICENSED"
+}

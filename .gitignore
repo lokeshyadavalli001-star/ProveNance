@@ -1,0 +1,19 @@
+# Node & Builds
+node_modules/
+dist/
+build/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.vercel/
+powershell.cmd
+.vite/
