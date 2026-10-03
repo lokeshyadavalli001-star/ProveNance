@@ -29,9 +29,10 @@ export const SimulationSandbox: React.FC<SimulationSandboxProps> = ({ approverEm
   async function loadScenarios() {
     try {
       const data = await apiService.getScenarios();
-      setScenarios(data.scenarios);
-      if (data.scenarios.length > 0) {
-        setSelectedScenario(data.scenarios[0]);
+      const list = data?.scenarios || [];
+      setScenarios(list);
+      if (list.length > 0) {
+        setSelectedScenario(list[0]);
       }
     } catch (e) {
       console.error('Failed to load scenarios', e);

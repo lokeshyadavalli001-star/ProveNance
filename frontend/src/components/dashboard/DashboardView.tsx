@@ -32,7 +32,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 }) => {
   const [activeSubTab, setActiveSubTab] = useState<'trends' | 'alerts' | 'hubs'>('trends');
 
-  const activeAlerts = alerts.filter(a => a.status === 'ACTIVE');
+  const activeAlerts = (alerts || []).filter(a => a?.status === 'ACTIVE');
 
   return (
     <div className="space-y-8 animate-fade-in max-w-6xl mx-auto">
@@ -56,7 +56,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* 4 Clean, Spacious KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {kpis.map((kpi) => (
+        {(kpis || []).map((kpi) => (
           <KPICard
             key={kpi.id}
             kpi={kpi}

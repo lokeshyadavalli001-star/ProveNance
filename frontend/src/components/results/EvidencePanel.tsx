@@ -30,7 +30,7 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
         </h3>
 
         <div className="space-y-4">
-          {evidenceChain.map((step) => (
+          {(evidenceChain || []).map((step) => (
             <div key={step.step} className="flex items-start space-x-3 text-xs">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-provenance-600 font-bold text-white text-[11px]">
                 {step.step}
@@ -57,7 +57,7 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          {dataSources.map((ds, idx) => (
+          {(dataSources || []).map((ds, idx) => (
             <div key={idx} className="rounded-lg bg-slate-900/80 p-3.5 border border-slate-800">
               <div className="flex items-center justify-between mb-1.5">
                 <span className="font-bold text-white">{ds.name}</span>

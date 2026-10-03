@@ -31,7 +31,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
     }
   };
 
-  const filteredRows = rows.filter(row => {
+  const filteredRows = (rows || []).filter(row => {
     if (!searchTerm) return true;
     return Object.values(row).some(val =>
       String(val).toLowerCase().includes(searchTerm.toLowerCase())

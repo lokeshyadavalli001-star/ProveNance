@@ -38,10 +38,10 @@ export const SupplyNetworkView: React.FC = () => {
           apiService.getGraph(),
           apiService.getMetrics()
         ]);
-        setNodes(graphData.nodes);
-        setEdges(graphData.edges);
-        setMetrics(metricsData.registry);
-        if (graphData.nodes.length > 0) {
+        setNodes(graphData?.nodes || []);
+        setEdges(graphData?.edges || []);
+        setMetrics(metricsData?.registry || []);
+        if (graphData?.nodes?.length > 0) {
           setSelectedNode(graphData.nodes[0]);
         }
       } catch (e) {
@@ -60,13 +60,13 @@ export const SupplyNetworkView: React.FC = () => {
     }
   }, [rippleTarget]);
 
-  const filteredNodes = nodes.filter((n) => {
+  const filteredNodes = (nodes || []).filter((n) => {
     const matchesType = selectedType === 'ALL' || n.type === selectedType;
     const matchesSearch = !searchQuery || n.label.toLowerCase().includes(searchQuery.toLowerCase()) || n.type.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesType && matchesSearch;
   });
 
-  const suppliers = nodes.filter(n => n.type === 'Supplier');
+  const suppliers = (nodes || []).filter(n => n.type === 'Supplier');
 
   if (isLoading) {
     return <div className="p-8 text-center text-slate-400 text-xs">Loading Supply Network Topology...</div>;

@@ -200,8 +200,9 @@ export const RealWorldMap: React.FC = () => {
     // Navigation Controls
     map.addControl(new NavigationControl({ visualizePitch: true }), 'bottom-right');
 
-    map.on('load', () => {
-      // Add Shipping Routes GeoJSON Sources
+    const setupShippingRoutes = () => {
+      if (!map || map.getSource('shipping-routes')) return;
+
       map.addSource('shipping-routes', {
         type: 'geojson',
         data: {
@@ -267,7 +268,6 @@ export const RealWorldMap: React.FC = () => {
         }
       });
 
-      // Disrupted Route Line Layer (Red glowing dashed line)
       map.addLayer({
         id: 'shipping-routes-disrupted',
         type: 'line',
@@ -284,7 +284,6 @@ export const RealWorldMap: React.FC = () => {
         }
       });
 
-      // Normal Routes Line Layer (Cobalt glowing line)
       map.addLayer({
         id: 'shipping-routes-normal',
         type: 'line',
@@ -300,7 +299,10 @@ export const RealWorldMap: React.FC = () => {
           'line-opacity': 0.75
         }
       });
-    });
+    };
+
+    map.on('load', setupShippingRoutes);
+    map.on('styledata', setupShippingRoutes);
 
     // Add Custom 3D Marker Elements
     markersRef.current.forEach(m => m.remove());
@@ -313,7 +315,6 @@ export const RealWorldMap: React.FC = () => {
       const isCritical = fac.status === 'CRITICAL';
       const isWarning = fac.status === 'WARNING';
       const colorBg = isCritical ? 'bg-red-500' : isWarning ? 'bg-amber-500' : 'bg-emerald-500';
-      const ringColor = isCritical ? 'border-red-500' : isWarning ? 'border-amber-500' : 'border-emerald-500';
 
       el.innerHTML = `
         <div class="relative flex items-center justify-center p-1">
@@ -343,6 +344,8 @@ export const RealWorldMap: React.FC = () => {
     });
 
     return () => {
+      markersRef.current.forEach(m => m.remove());
+      markersRef.current = [];
       map.remove();
       mapRef.current = null;
     };

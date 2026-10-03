@@ -76,9 +76,9 @@ export function App() {
   async function loadDashboardData() {
     try {
       const summary = await apiService.getDashboardSummary();
-      setKpis(summary.kpis);
-      setHistoricalTrends(summary.historicalTrends);
-      setAlerts(summary.alerts);
+      setKpis(summary?.kpis || []);
+      setHistoricalTrends(summary?.historicalTrends || []);
+      setAlerts(summary?.alerts || []);
     } catch (e) {
       console.error('Failed to load dashboard', e);
     }
@@ -115,7 +115,7 @@ export function App() {
     setMfaModalOpen(true);
   };
 
-  const unresolvedAlertCount = alerts.filter(a => a.status === 'ACTIVE').length;
+  const unresolvedAlertCount = (alerts || []).filter(a => a?.status === 'ACTIVE').length;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-provenance-500 selection:text-white">

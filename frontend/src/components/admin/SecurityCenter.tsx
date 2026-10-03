@@ -38,10 +38,10 @@ export const SecurityCenter: React.FC = () => {
         apiService.getApiKeys(),
         apiService.getRoles()
       ]);
-      setAuditRecords(recData.records);
-      setSecurityAlerts(altData.alerts);
-      setApiKeys(keysData.apiKeys);
-      setRolesData(roles);
+      setAuditRecords(recData?.records || []);
+      setSecurityAlerts(altData?.alerts || []);
+      setApiKeys(keysData?.apiKeys || []);
+      setRolesData(roles || { roles: [] });
     } catch (e) {
       console.error(e);
     }

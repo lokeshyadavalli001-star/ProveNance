@@ -94,7 +94,7 @@ export const AuditTrailPanel: React.FC<AuditTrailPanelProps> = ({
               <p className="text-[11px] text-slate-400 mt-0.5">
                 Restricted columns filtered or masked from payload:{' '}
                 <strong className="text-amber-300">
-                  {security.restrictedColumnsFiltered.length > 0
+                  {(security?.restrictedColumnsFiltered || []).length > 0
                     ? security.restrictedColumnsFiltered.join(', ')
                     : 'None (Authorized Role)'}
                 </strong>
