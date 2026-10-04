@@ -14,7 +14,9 @@ import {
   Zap,
   Globe2,
   Box,
-  Eye
+  Eye,
+  Minimize2,
+  Maximize2
 } from 'lucide-react';
 import { TiltCard } from '../common/TiltCard.js';
 
@@ -181,6 +183,7 @@ export const RealWorldMap: React.FC = () => {
   const [activeStyle, setActiveStyle] = useState('https://tiles.openfreemap.org/styles/liberty');
   const [selectedFacility, setSelectedFacility] = useState<RealWorldLocation>(REAL_WORLD_FACILITIES[0]);
   const [is3DMode, setIs3DMode] = useState(true);
+  const [isHudMinimized, setIsHudMinimized] = useState(false);
 
   // Initialize MapLibre
   useEffect(() => {
@@ -447,70 +450,83 @@ export const RealWorldMap: React.FC = () => {
       />
 
       {/* Selected Facility HUD Card on Bottom Left */}
-      <div className="absolute bottom-4 left-4 z-10 max-w-sm w-full bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border border-slate-700/80 shadow-2xl space-y-3 pointer-events-auto">
+      <div className="absolute bottom-4 left-4 z-10 max-w-xs sm:max-w-sm w-full bg-slate-900/95 backdrop-blur-md p-3.5 sm:p-4 rounded-xl border border-slate-700/80 shadow-2xl space-y-2.5 pointer-events-auto transition-all">
         <div className="flex items-start justify-between">
-          <div>
+          <div className="pr-2">
             <div className="flex items-center space-x-1.5">
-              <span className="text-xs font-bold text-white tracking-wide">{selectedFacility.name}</span>
+              <span className="text-xs font-bold text-white tracking-wide truncate max-w-[200px] sm:max-w-none">{selectedFacility.name}</span>
             </div>
             <span className="text-[10px] text-slate-400 font-mono block mt-0.5">
               UN/LOCODE: <strong className="text-provenance-400">{selectedFacility.code}</strong> • {selectedFacility.city}, {selectedFacility.country}
             </span>
           </div>
 
-          <span
-            className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider border ${
-              selectedFacility.status === 'CRITICAL'
-                ? 'bg-red-950 text-red-400 border-red-800 animate-pulse'
-                : selectedFacility.status === 'WARNING'
-                ? 'bg-amber-950 text-amber-400 border-amber-800'
-                : 'bg-emerald-950 text-emerald-400 border-emerald-800'
-            }`}
-          >
-            {selectedFacility.status}
-          </span>
-        </div>
-
-        <p className="text-[11px] text-slate-300 leading-relaxed">{selectedFacility.description}</p>
-
-        {/* Real Address Card */}
-        <div className="rounded-lg bg-slate-950/80 p-2 border border-slate-800 text-[10px] text-slate-400 font-mono flex items-start space-x-1.5">
-          <MapPin className="h-3.5 w-3.5 text-provenance-400 shrink-0 mt-0.5" />
-          <span className="truncate">{selectedFacility.realAddress}</span>
-        </div>
-
-        {/* Live Metrics Grid */}
-        <div className="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800/80 text-center text-xs">
-          <div className="bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
-            <span className="text-[9px] text-slate-500 uppercase block font-semibold">OTIF Adherence</span>
+          <div className="flex items-center space-x-1.5 shrink-0">
             <span
-              className={`font-bold text-xs ${
-                selectedFacility.otif >= 90 ? 'text-emerald-400' : 'text-red-400'
+              className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider border ${
+                selectedFacility.status === 'CRITICAL'
+                  ? 'bg-red-950 text-red-400 border-red-800 animate-pulse'
+                  : selectedFacility.status === 'WARNING'
+                  ? 'bg-amber-950 text-amber-400 border-amber-800'
+                  : 'bg-emerald-950 text-emerald-400 border-emerald-800'
               }`}
             >
-              {selectedFacility.otif}%
+              {selectedFacility.status}
             </span>
-          </div>
-          <div className="bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
-            <span className="text-[9px] text-slate-500 uppercase block font-semibold">Lead Time</span>
-            <span className="font-bold text-xs text-white">{selectedFacility.avgLeadTime}</span>
-          </div>
-          <div className="bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
-            <span className="text-[9px] text-slate-500 uppercase block font-semibold">Safety Stock</span>
-            <span
-              className={`font-bold text-xs truncate block ${
-                selectedFacility.status === 'WARNING' ? 'text-amber-400' : 'text-slate-200'
-              }`}
+            <button
+              onClick={() => setIsHudMinimized(!isHudMinimized)}
+              className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              title={isHudMinimized ? "Expand Details" : "Minimize Card"}
             >
-              {selectedFacility.safetyStock}
-            </span>
+              {isHudMinimized ? <Maximize2 className="h-3 w-3" /> : <Minimize2 className="h-3 w-3" />}
+            </button>
           </div>
         </div>
+
+        {!isHudMinimized && (
+          <>
+            <p className="text-[11px] text-slate-300 leading-relaxed">{selectedFacility.description}</p>
+
+            {/* Real Address Card */}
+            <div className="rounded-lg bg-slate-950/80 p-2 border border-slate-800 text-[10px] text-slate-400 font-mono flex items-start space-x-1.5">
+              <MapPin className="h-3.5 w-3.5 text-provenance-400 shrink-0 mt-0.5" />
+              <span className="truncate">{selectedFacility.realAddress}</span>
+            </div>
+
+            {/* Live Metrics Grid */}
+            <div className="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800/80 text-center text-xs">
+              <div className="bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
+                <span className="text-[9px] text-slate-500 uppercase block font-semibold">OTIF Adherence</span>
+                <span
+                  className={`font-bold text-xs ${
+                    selectedFacility.otif >= 90 ? 'text-emerald-400' : 'text-red-400'
+                  }`}
+                >
+                  {selectedFacility.otif}%
+                </span>
+              </div>
+              <div className="bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
+                <span className="text-[9px] text-slate-500 uppercase block font-semibold">Lead Time</span>
+                <span className="font-bold text-xs text-white">{selectedFacility.avgLeadTime}</span>
+              </div>
+              <div className="bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
+                <span className="text-[9px] text-slate-500 uppercase block font-semibold">Safety Stock</span>
+                <span
+                  className={`font-bold text-xs truncate block ${
+                    selectedFacility.status === 'WARNING' ? 'text-amber-400' : 'text-slate-200'
+                  }`}
+                >
+                  {selectedFacility.safetyStock}
+                </span>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Quick Facility Pivot Pills on Bottom Right */}
-      <div className="absolute bottom-4 right-4 z-10 hidden sm:flex flex-col space-y-1.5 pointer-events-auto">
-        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-900/80 px-2 py-0.5 rounded border border-slate-800 self-end">
+      {/* Quick Facility Pivot Pills on Bottom Right (Offset from MapLibre controls) */}
+      <div className="absolute bottom-4 right-14 z-10 hidden sm:flex flex-col space-y-1.5 pointer-events-auto">
+        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-900/90 backdrop-blur-md px-2 py-0.5 rounded border border-slate-800 self-end shadow-md">
           Direct Facility Pivots:
         </span>
         <div className="flex flex-wrap justify-end gap-1 max-w-xs">
@@ -518,7 +534,7 @@ export const RealWorldMap: React.FC = () => {
             <button
               key={fac.id}
               onClick={() => flyToFacility(fac)}
-              className={`rounded-lg px-2 py-1 text-[10px] font-medium transition ${
+              className={`rounded-lg px-2 py-1 text-[10px] font-medium transition backdrop-blur-md shadow-sm ${
                 selectedFacility.id === fac.id
                   ? 'bg-provenance-600 text-white shadow-sm'
                   : 'bg-slate-900/90 text-slate-300 hover:bg-slate-800 border border-slate-800'

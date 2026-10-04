@@ -52,7 +52,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(rateLimitMiddleware);
 
 // 5. Health Check
-app.get('/health', (req: Request, res: Response) => {
+const healthHandler = (req: Request, res: Response) => {
   res.json({
     status: 'HEALTHY',
     service: 'ProveNance Enterprise Intelligence Gateway',
@@ -65,7 +65,9 @@ app.get('/health', (req: Request, res: Response) => {
       dataProtection: 'AES-256-GCM Column Level Active'
     }
   });
-});
+};
+app.get('/health', healthHandler);
+app.get('/api/health', healthHandler);
 
 // 6. Mount Governed API Endpoints
 app.use('/api/v1/auth', authRoutes);

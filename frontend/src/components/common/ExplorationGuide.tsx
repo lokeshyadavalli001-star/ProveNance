@@ -71,7 +71,7 @@ export const ExplorationGuide: React.FC<ExplorationGuideProps> = ({
   onSelectTab
 }) => {
   const [visitedTabs, setVisitedTabs] = useState<Set<MainNavTab>>(() => new Set([currentTab]));
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
 
   useEffect(() => {
     setVisitedTabs((prev) => {
@@ -89,10 +89,11 @@ export const ExplorationGuide: React.FC<ExplorationGuideProps> = ({
     return (
       <button
         onClick={() => setIsMinimized(false)}
-        className="fixed bottom-4 right-4 z-50 flex items-center space-x-2 rounded-full bg-slate-900/95 border border-slate-700/80 px-3.5 py-2 text-xs font-semibold text-slate-200 shadow-xl backdrop-blur-md hover:border-provenance-500 hover:text-white transition group"
+        className="fixed bottom-4 right-4 z-50 flex items-center space-x-2 rounded-full bg-slate-900/90 border border-provenance-500/40 px-3.5 py-2 text-xs font-semibold text-slate-200 shadow-xl backdrop-blur-md hover:border-provenance-400 hover:text-white hover:bg-slate-850 hover:shadow-provenance-500/20 transition group"
+        title="Open interactive platform tour guide"
       >
         <Compass className="h-4 w-4 text-provenance-400 group-hover:rotate-45 transition-transform duration-300" />
-        <span>Platform Guide ({visitedTabs.size}/{WORKSPACE_STEPS.length})</span>
+        <span>Platform Tour ({visitedTabs.size}/{WORKSPACE_STEPS.length})</span>
       </button>
     );
   }
