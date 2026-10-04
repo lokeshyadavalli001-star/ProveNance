@@ -213,14 +213,14 @@ export const CryptoVault3D: React.FC = () => {
                   <div className="font-mono text-[10px] text-slate-400 bg-slate-950/80 p-1.5 rounded border border-slate-800/80 truncate">
                     <span className="text-slate-500">Hash: </span>
                     <span className={isFailed ? 'text-red-400' : 'text-emerald-400'}>
-                      {block.currentHash.slice(0, 16)}...
+                      {(block.currentHash || '').slice(0, 16)}...
                     </span>
                   </div>
                 </div>
 
                 {/* Connecting Arrow for Chain Continuity */}
                 <div className="mt-3 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-500 font-mono">
-                  <span>Prev: {block.previousHash.slice(0, 8)}...</span>
+                  <span>Prev: {(block.previousHash || '').slice(0, 8)}...</span>
                   <span
                     className={`font-semibold ${
                       isFailed ? 'text-red-400' : 'text-provenance-400'

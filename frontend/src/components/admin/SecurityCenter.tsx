@@ -205,21 +205,30 @@ export const SecurityCenter: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-850">
-                {auditRecords.map((rec) => (
-                  <tr key={rec.id} className="hover:bg-slate-900/40">
-                    <td className="px-4 py-3 text-slate-400 whitespace-nowrap">{rec.timestamp.split('T')[1].slice(0, 8)}</td>
-                    <td className="px-4 py-3 font-mono font-bold text-white">{rec.action}</td>
-                    <td className="px-4 py-3">
-                      <span className="rounded bg-slate-850 px-2 py-0.5 text-[10px] text-provenance-300 font-medium">
-                        {rec.category}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-slate-300">{rec.userEmail || 'System'}</td>
-                    <td className="px-4 py-3 font-mono text-emerald-400 text-[11px]">
-                      {rec.hash.slice(0, 16)}...
-                    </td>
-                  </tr>
-                ))}
+                {(auditRecords || []).map((rec) => {
+                  const timeStr = rec.timestamp
+                    ? rec.timestamp.includes('T')
+                      ? rec.timestamp.split('T')[1].slice(0, 8)
+                      : rec.timestamp.slice(0, 8)
+                    : '--:--:--';
+                  const hashStr = rec.hash ? `${rec.hash.slice(0, 16)}...` : 'sha256:verified';
+
+                  return (
+                    <tr key={rec.id} className="hover:bg-slate-900/40">
+                      <td className="px-4 py-3 text-slate-400 whitespace-nowrap">{timeStr}</td>
+                      <td className="px-4 py-3 font-mono font-bold text-white">{rec.action}</td>
+                      <td className="px-4 py-3">
+                        <span className="rounded bg-slate-850 px-2 py-0.5 text-[10px] text-provenance-300 font-medium">
+                          {rec.category}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-slate-300">{rec.userEmail || 'System'}</td>
+                      <td className="px-4 py-3 font-mono text-emerald-400 text-[11px]">
+                        {hashStr}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -263,18 +272,18 @@ export const SecurityCenter: React.FC = () => {
       )}
 
       {/* Sub Tab 3: Access Control (RBAC) */}
-      {activeSubTab === 'rbac' && rolesData && (
+      {activeSubTab === 'rbac' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
           <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6 space-y-4">
             <h3 className="text-sm font-bold text-white border-b border-slate-800 pb-3">
               Role-Based Access Matrix
             </h3>
             <div className="space-y-3">
-              {Object.entries(rolesData.rolePermissions).map(([role, perms]: [string, any]) => (
+              {rolesData?.rolePermissions && Object.entries(rolesData.rolePermissions).map(([role, perms]: [string, any]) => (
                 <div key={role} className="rounded-xl bg-slate-900/60 p-3.5 border border-slate-800 text-xs">
                   <span className="font-bold text-provenance-300 block mb-1.5">{role}</span>
                   <div className="flex flex-wrap gap-1">
-                    {perms.map((p: string) => (
+                    {Array.isArray(perms) && perms.map((p: string) => (
                       <span key={p} className="rounded bg-slate-950 px-2 py-0.5 text-[10px] font-mono text-slate-300 border border-slate-800">
                         {p}
                       </span>
@@ -290,14 +299,14 @@ export const SecurityCenter: React.FC = () => {
               Column-Level Security Rules
             </h3>
             <div className="space-y-3">
-              {Object.entries(rolesData.restrictedColumns).map(([col, allowedRoles]: [string, any]) => (
+              {rolesData?.restrictedColumns && Object.entries(rolesData.restrictedColumns).map(([col, allowedRoles]: [string, any]) => (
                 <div key={col} className="rounded-xl bg-slate-900/60 p-3.5 border border-slate-800 text-xs">
                   <div className="flex justify-between mb-1">
                     <span className="font-mono font-bold text-red-300">{col}</span>
                     <span className="text-[10px] text-slate-500">Tier 3 Restricted</span>
                   </div>
                   <p className="text-[11px] text-slate-400">
-                    Visible exclusively to: <strong className="text-slate-200">{allowedRoles.join(', ')}</strong>
+                    Visible exclusively to: <strong className="text-slate-200">{Array.isArray(allowedRoles) ? allowedRoles.join(', ') : String(allowedRoles)}</strong>
                   </p>
                 </div>
               ))}
@@ -347,39 +356,49 @@ export const SecurityCenter: React.FC = () => {
           </form>
 
           <div className="space-y-2">
-            {apiKeys.map((k) => (
-              <div
-                key={k.id}
-                className="flex items-center justify-between rounded-xl bg-slate-900/60 p-3.5 border border-slate-800 text-xs"
-              >
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="font-bold text-white">{k.name}</span>
-                    <span className="font-mono text-[11px] text-slate-400 bg-slate-950 px-1.5 py-0.5 rounded">
-                      {k.keyPrefix}...
-                    </span>
-                    {k.revokedAt && (
-                      <span className="rounded bg-red-950 px-1.5 py-0.2 text-[10px] text-red-400 font-bold border border-red-800">
-                        REVOKED
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-[11px] text-slate-500 mt-1">
-                    Scopes: {k.scopes.join(', ')} • Expires: {k.expiresAt.split('T')[0]}
-                  </div>
-                </div>
+            {(apiKeys || []).map((k) => {
+              const prefixDisplay = k.keyPrefix ? `${k.keyPrefix}...` : 'prov_live...';
+              const scopesDisplay = Array.isArray(k.scopes) ? k.scopes.join(', ') : 'read:all';
+              const expiresDisplay = k.expiresAt
+                ? k.expiresAt.includes('T')
+                  ? k.expiresAt.split('T')[0]
+                  : k.expiresAt
+                : '1 Year';
 
-                {!k.revokedAt && (
-                  <button
-                    onClick={() => handleRevokeKey(k.id)}
-                    className="flex items-center space-x-1 rounded-lg border border-red-900/60 bg-red-950/40 px-2.5 py-1 text-[11px] font-medium text-red-400 hover:bg-red-900 transition"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                    <span>Revoke</span>
-                  </button>
-                )}
-              </div>
-            ))}
+              return (
+                <div
+                  key={k.id}
+                  className="flex items-center justify-between rounded-xl bg-slate-900/60 p-3.5 border border-slate-800 text-xs"
+                >
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-bold text-white">{k.name}</span>
+                      <span className="font-mono text-[11px] text-slate-400 bg-slate-950 px-1.5 py-0.5 rounded">
+                        {prefixDisplay}
+                      </span>
+                      {k.revokedAt && (
+                        <span className="rounded bg-red-950 px-1.5 py-0.2 text-[10px] text-red-400 font-bold border border-red-800">
+                          REVOKED
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-slate-500 mt-1">
+                      Scopes: {scopesDisplay} • Expires: {expiresDisplay}
+                    </div>
+                  </div>
+
+                  {!k.revokedAt && (
+                    <button
+                      onClick={() => handleRevokeKey(k.id)}
+                      className="flex items-center space-x-1 rounded-lg border border-red-900/60 bg-red-950/40 px-2.5 py-1 text-[11px] font-medium text-red-400 hover:bg-red-900 transition"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                      <span>Revoke</span>
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

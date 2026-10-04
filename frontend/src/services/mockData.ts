@@ -481,7 +481,9 @@ export const MOCK_API_KEYS = [
   {
     id: 'key_prod_erp_gateway',
     name: 'SAP S/4HANA ERP Connector',
-    createdAt: '2026-09-15',
+    keyPrefix: 'prov_live_9a8b',
+    createdAt: '2026-09-15T00:00:00Z',
+    expiresAt: '2027-09-15T00:00:00Z',
     lastUsed: '2026-10-03 15:40:22',
     scopes: ['orders:sync', 'inventory:read', 'suppliers:read'],
     status: 'ACTIVE'
@@ -489,7 +491,9 @@ export const MOCK_API_KEYS = [
   {
     id: 'key_tms_ocean_telemetry',
     name: 'Blue Yonder TMS Live Ingestion',
-    createdAt: '2026-09-20',
+    keyPrefix: 'prov_live_44f1',
+    createdAt: '2026-09-20T00:00:00Z',
+    expiresAt: '2027-09-20T00:00:00Z',
     lastUsed: '2026-10-03 15:42:01',
     scopes: ['shipments:ingest', 'telemetry:write'],
     status: 'ACTIVE'

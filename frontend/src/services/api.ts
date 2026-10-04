@@ -394,10 +394,20 @@ export const apiService = {
   getRoles: async () => {
     try {
       const res = await api.get('/admin/roles');
-      if (res.data?.roles) return res.data;
+      if (res.data?.rolePermissions) return res.data;
     } catch (e) {}
     return {
-      roles: MOCK_ROLES
+      rolePermissions: {
+        ADMIN: ['query:all', 'query:unmasked', 'audit:read', 'audit:verify', 'simulate:execute', 'simulate:approve', 'admin:keys'],
+        ANALYST: ['query:scoped', 'query:masked', 'audit:read', 'simulate:execute'],
+        OPERATOR: ['query:operational', 'shipment:track', 'alert:acknowledge'],
+        VIEWER: ['kpi:view', 'dashboard:view']
+      },
+      restrictedColumns: {
+        bank_details: ['ADMIN'],
+        contract_pricing: ['ADMIN'],
+        unitCostUSD: ['ADMIN']
+      }
     };
   },
 
@@ -419,7 +429,9 @@ export const apiService = {
     const newKey = {
       id: `key_${Date.now()}`,
       name,
-      createdAt: new Date().toISOString().split('T')[0],
+      keyPrefix: 'prov_live_' + Math.random().toString(36).substring(2, 6),
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 365 * 86400000).toISOString(),
       lastUsed: 'Never',
       scopes,
       status: 'ACTIVE'
